@@ -2,15 +2,14 @@ import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/Home.module.scss';
 
-const BLOG_URL = 'https://next-ghost-blog-backend.herokuapp.com';
-const CONTENT_API_KEY = 'bbe57347cf4334b9455cae967f';
+const { BLOG_URL, CONTENT_API_KEY } = process.env;
 
 type Post = {
   title: string;
   slug: string;
 };
 
-async function getPost() {
+async function getPosts() {
   const res = await fetch(
     `${BLOG_URL}/ghost/api/v3/content/posts/?key=${CONTENT_API_KEY}&fields=title,slug,custom_excerpt`
   ).then((res) => res.json());
@@ -21,7 +20,7 @@ async function getPost() {
 }
 
 export const getStaticProps = async ({ params }) => {
-  const posts = await getPost();
+  const posts = await getPosts();
 
   return {
     props: { posts },
