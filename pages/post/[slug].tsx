@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styles from '../../styles/Home.module.scss';
@@ -25,6 +26,7 @@ export const getStaticProps = async ({ params }) => {
 
   return {
     props: { post },
+    revalidate: 10,
   };
 };
 
@@ -37,19 +39,41 @@ export const getStaticPaths = () => {
 
 const Post: React.FC<{ post: Post }> = ({ post }) => {
   const router = useRouter();
+  const [enableLoadComments, setEnableLoadComments] = useState<boolean>(true);
 
   if (router.isFallback) {
     return <h1>Loading...</h1>;
+  }
+
+  function loadComments() {
+    setEnableLoadComments(false);
+
+    (window as any).disqus_config = function () {
+      this.page.url = window.location.href;
+      this.page.identifier = post.slug;
+    };
+
+    const script = document.createElement('script');
+    script.src = 'https://next-ghost-blog.disqus.com/embed.js';
+    script.setAttribute('data-timestamp', Date.now().toString());
+
+    document.body.appendChild(script);
   }
 
   return (
     <>
       <div className={styles.container}>
         <Link href="/">
-          <a>Go Back</a>
+          <a className={styles.links}>Go Back</a>
         </Link>
         <h1>{post.title}</h1>
         <div dangerouslySetInnerHTML={{ __html: post.html }} />
+        {enableLoadComments && (
+          <p className={styles.links} onClick={loadComments}>
+            Load Comments
+          </p>
+        )}
+        <div id="disqus_thread" className="disqus_thread"></div>
       </div>
     </>
   );

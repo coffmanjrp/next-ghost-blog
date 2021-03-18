@@ -7,6 +7,12 @@
   align-items: center;
 }
 
+.links {
+  align-self: self-start;
+  text-align: left;
+  cursor: pointer;
+}
+
 .main {
   padding: 5rem 0;
   flex: 1;
