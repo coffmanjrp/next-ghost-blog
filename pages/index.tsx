@@ -30,18 +30,23 @@ export const getStaticProps = async ({ params }) => {
 
 const Home: React.FC<{ posts: Post[] }> = ({ posts }) => {
   return (
-    <div className={styles.container}>
-      <h1>Hello to my blog</h1>
-      <ul>
-        {posts.map((post, index) => (
-          <li key={index}>
-            <Link href="/post/[slug]" as={`/post/${post.slug}`}>
-              <a>{post.title}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <Head>
+        <title>Next Ghost Blog | Home</title>
+      </Head>
+      <div className={styles.container}>
+        <h1>Hello to my blog</h1>
+        <ul>
+          {posts.map((post, index) => (
+            <li key={index}>
+              <Link href="/post/[slug]" as={`/post/${post.slug}`}>
+                <a>{post.title}</a>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 };
 

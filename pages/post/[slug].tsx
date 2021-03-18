@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../../styles/Home.module.scss';
 
@@ -62,6 +63,9 @@ const Post: React.FC<{ post: Post }> = ({ post }) => {
 
   return (
     <>
+      <Head>
+        <title>Next Ghost Blog | {post.title}</title>
+      </Head>
       <div className={styles.container}>
         <Link href="/">
           <a className={styles.links}>Go Back</a>
